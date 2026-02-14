@@ -1,0 +1,12 @@
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/dto/TaskDTO.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/exception/GlobalExceptionHandler.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/config/WebConfig.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/controller/TaskController.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/dto/ApiResponse.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/exception/ResourceNotFoundException.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/repository/TaskRepository.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/controller/HealthController.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/service/TaskService.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/config/RedisConfig.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/entity/Task.java
+/Users/aisalkyn/DevOps-Training/taskmanagerapi/task-manager-api/src/main/java/com/devops/training/TaskManagerApplication.java

@@ -1,0 +1,193 @@
+{
+  "info": {
+    "name": "Task Manager API - DevOps Training",
+    "description": "Complete API collection for Task Manager API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Custom Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/health",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "health"]
+            }
+          }
+        },
+        {
+          "name": "Actuator Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/actuator/health",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["actuator", "health"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Get All Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Get Task by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "1"]
+            }
+          }
+        },
+        {
+          "name": "Get Tasks by Status",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/status/TODO",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "status", "TODO"]
+            }
+          }
+        },
+        {
+          "name": "Search Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/search?title=kubernetes",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "search"],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "kubernetes"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Task Count",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/count",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "count"]
+            }
+          }
+        },
+        {
+          "name": "Create Task - High Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Learn Kubernetes\",\n  \"description\": \"Complete K8s fundamentals course and deploy first application\",\n  \"status\": \"TODO\",\n  \"priority\": \"HIGH\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Create Task - Medium Priority",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Setup Jenkins Pipeline\",\n  \"description\": \"Create CI/CD pipeline with Jenkins for automated deployment\",\n  \"status\": \"TODO\",\n  \"priority\": \"MEDIUM\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/tasks",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks"]
+            }
+          }
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Learn Kubernetes\",\n  \"description\": \"Complete K8s fundamentals course and deploy first application\",\n  \"status\": \"IN_PROGRESS\",\n  \"priority\": \"HIGH\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "1"]
+            }
+          }
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/v1/tasks/1",
+              "host": ["{{base_url}}"],
+              "path": ["v1", "tasks", "1"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

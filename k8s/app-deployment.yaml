@@ -1,0 +1,169 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: task-manager-api
+  namespace: task-manager
+  labels:
+    app: task-manager-api
+    tier: backend
+    version: v1
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: task-manager-api
+  template:
+    metadata:
+      labels:
+        app: task-manager-api
+        tier: backend
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "8080"
+    spec:
+      containers:
+      - name: task-manager-api
+        image: task-manager-api:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        # config from configmap
+        - name: SPRING_PROFILE
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: SPRING_PROFILE
+        - name: APP_ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: APP_ENVIRONMENT
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: SERVER_PORT
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DB_URL
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DB_USERNAME
+        - name: DB_DRIVER
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DB_DRIVER
+        - name: HIBERNATE_DIALECT
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: HIBERNATE_DIALECT
+        - name: DDL_AUTO
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: DDL_AUTO
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: REDIS_PORT
+        - name: CACHE_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: task-manager-config
+              key: CACHE_ENABLED
+        
+        # secrets
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: task-manager-secret
+              key: DB_PASSWORD
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: task-manager-secret
+              key: REDIS_PASSWORD
+        
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        
+        # health checks
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 90
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        
+        startupProbe:
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 12
+      
+      # wait for dependencies
+      initContainers:
+      - name: wait-for-postgres
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z postgres-service 5432; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+          echo "PostgreSQL is ready!"
+      
+      - name: wait-for-redis
+        image: busybox:1.35
+        command:
+        - sh
+        - -c
+        - |
+          until nc -z redis-service 6379; do
+            echo "Waiting for Redis..."
+            sleep 2
+          done
+          echo "Redis is ready!"

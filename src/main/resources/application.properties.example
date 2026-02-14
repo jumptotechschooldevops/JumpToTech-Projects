@@ -1,0 +1,62 @@
+# This is an alternative to application.yml
+# Students can use either .yml or .properties format
+
+# Server Configuration
+server.port=${SERVER_PORT:8080}
+server.servlet.context-path=${CONTEXT_PATH:/api}
+
+# Application
+spring.application.name=${APP_NAME:task-manager-api}
+spring.profiles.active=${SPRING_PROFILE:local}
+
+# Database Configuration
+spring.datasource.url=${DB_URL:jdbc:h2:mem:taskdb}
+spring.datasource.username=${DB_USERNAME:sa}
+spring.datasource.password=${DB_PASSWORD:}
+spring.datasource.driver-class-name=${DB_DRIVER:org.h2.Driver}
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=${DDL_AUTO:update}
+spring.jpa.show-sql=${SHOW_SQL:true}
+spring.jpa.properties.hibernate.dialect=${HIBERNATE_DIALECT:org.hibernate.dialect.H2Dialect}
+spring.jpa.properties.hibernate.format_sql=true
+
+# H2 Console
+spring.h2.console.enabled=${H2_CONSOLE_ENABLED:true}
+spring.h2.console.path=${H2_CONSOLE_PATH:/h2-console}
+
+# Redis Configuration
+spring.redis.host=${REDIS_HOST:localhost}
+spring.redis.port=${REDIS_PORT:6379}
+spring.redis.password=${REDIS_PASSWORD:}
+spring.redis.timeout=${REDIS_TIMEOUT:2000}
+spring.redis.lettuce.pool.max-active=${REDIS_POOL_MAX_ACTIVE:8}
+spring.redis.lettuce.pool.max-idle=${REDIS_POOL_MAX_IDLE:8}
+spring.redis.lettuce.pool.min-idle=${REDIS_POOL_MIN_IDLE:0}
+
+# Cache Configuration
+spring.cache.type=${CACHE_TYPE:redis}
+spring.cache.redis.time-to-live=${CACHE_TTL:600000}
+
+# Actuator Configuration
+management.endpoints.web.exposure.include=${ACTUATOR_ENDPOINTS:health,info,metrics,prometheus}
+management.endpoints.web.base-path=${ACTUATOR_BASE_PATH:/actuator}
+management.endpoint.health.show-details=${HEALTH_SHOW_DETAILS:always}
+management.metrics.export.prometheus.enabled=${PROMETHEUS_ENABLED:true}
+
+# Application Custom Properties
+app.version=${APP_VERSION:1.0.0}
+app.environment=${APP_ENVIRONMENT:local}
+app.cache.enabled=${CACHE_ENABLED:true}
+app.cache.ttl=${CACHE_TTL:600}
+
+# Logging
+logging.level.root=${LOG_LEVEL_ROOT:INFO}
+logging.level.com.devops.training=${LOG_LEVEL_APP:DEBUG}
+logging.level.org.springframework.web=${LOG_LEVEL_SPRING_WEB:INFO}
+logging.level.org.hibernate=${LOG_LEVEL_HIBERNATE:INFO}
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss} - %msg%n
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+logging.file.name=${LOG_FILE:logs/task-manager.log}
+logging.file.max-size=${LOG_FILE_MAX_SIZE:10MB}
+logging.file.max-history=${LOG_FILE_MAX_HISTORY:30}
