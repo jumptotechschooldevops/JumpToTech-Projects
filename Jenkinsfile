@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven-3'
+    }
+
     environment {
         IMAGE_NAME = "aisalkyn85/task-manager-api"
         IMAGE_TAG = "${BUILD_NUMBER}"
@@ -46,15 +50,6 @@ pipeline {
             steps {
                 sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
             }
-        }
-    }
-
-    post {
-        success {
-            echo "CI Pipeline SUCCESS. Docker image pushed."
-        }
-        failure {
-            echo "CI Pipeline FAILED."
         }
     }
 }
