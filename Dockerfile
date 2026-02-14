@@ -1,35 +1,49 @@
-# Multi-stage build to reduce final image size
-FROM maven:3.8.6-openjdk-11-slim AS builder
+# =========================
+# Stage 1 — Build Stage
+# =========================
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# copy pom first to leverage docker layer caching
+# Copy pom first for layer caching
 COPY pom.xml .
 RUN mvn dependency:go-offline -B
 
-# now copy source and build
+# Copy source code
 COPY src ./src
+
+# Build jar
 RUN mvn clean package -DskipTests
 
-# runtime stage - keep it small
-FROM openjdk:11-jre-slim
+
+# =========================
+# Stage 2 — Runtime Stage
+# =========================
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
-# security: don't run as root
+# Install curl for healthcheck
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
 RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-# copy jar from build stage
-COPY --from=builder /app/target/task-manager-api-*.jar app.jar
+# Copy jar from builder stage
+COPY --from=builder /app/target/*.jar app.jar
 
+# Change ownership
 RUN chown -R appuser:appuser /app
 
 USER appuser
 
 EXPOSE 8080
 
-# basic health check
+# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=60s --retries=3 \
   CMD curl -f http://localhost:8080/actuator/health || exit 1
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
+
