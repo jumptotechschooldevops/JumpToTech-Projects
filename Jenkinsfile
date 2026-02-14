@@ -2,12 +2,12 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven-3'
+        maven 'M3'
     }
 
     environment {
         IMAGE_NAME = "aisalkyn85/task-manager-api"
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -27,7 +27,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh """
-                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                    docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                 """
             }
         }
@@ -40,7 +40,7 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh """
-                    echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
+                        echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin
                     """
                 }
             }
@@ -50,6 +50,15 @@ pipeline {
             steps {
                 sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
             }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ CI SUCCESS - Docker image pushed successfully."
+        }
+        failure {
+            echo "❌ CI FAILED - Check console output."
         }
     }
 }
